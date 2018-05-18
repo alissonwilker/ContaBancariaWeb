@@ -40,7 +40,7 @@ public class ContaBancariaWebITCase {
 
     @Test
     public void should_create_greeting() {
-        System.setProperty("webdriver.gecko.driver", "/Users/alissonwilker/Downloads/geckodriver");
+        System.setProperty("webdriver.gecko.driver", "/tmp/geckodriver");
         
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.addArguments("-headless");
