@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Conta Bancária Web</title>
+</head>
+<body>
+	<h1>Conta Bancária Web</h1>
+	<form method="GET" action="BancoServlet">
+		<h2>Dados do dono da Conta Bancária</h2>
+		Nome do Cliente: <input type="text" name="nomeCliente" /><br /> <input
+			type="radio" name="tipoCliente" value="pessoaFisica"> Pessoa
+		Física<br /> <input type="radio" name="tipoCliente"
+			value="pessoaJuridica"> Pessoa Jurídica<br /> CPF/CNPJ: <input
+			type="text" name="cpfCnpj" /><br />
+		<h2>Operações disponíveis na Conta Bancária</h2>
+		<input type="radio" name="operacao" value="recuperarNomeCliente">
+		Recuperar nome do cliente.<br /> <input type="radio" name="operacao"
+			value="recuperarCpfCliente"> Recuperar CPF do cliente.<br />
+		<input type="radio" name="operacao" value="recuperarCnpjCliente">
+		Recuperar CNPJ do cliente.<br /> <input type="radio" name="operacao"
+			value="recuperarSaldo"> Recuperar saldo da conta.<br /> <input
+			type="radio" name="operacao" value="depositarValor">
+		Depositar valor na conta.<br /> <input type="radio" name="operacao"
+			value="sacarValor"> Sacar valor da conta.<br /> <input
+			type="radio" name="operacao" value="depositarSacarValor">
+		Depositar um valor e em seguida sacar outro valor da conta.<br />
+		Valor da operação de depósito (se for o caso): <input type="number"
+			name="valorDeposito" /><br /> Valor da operação de saque (se for o
+		caso):<input type="number" name="valorSaque" /><br />
+		<br /> <input type="submit" />
+	</form>
+</body>
+</html>
