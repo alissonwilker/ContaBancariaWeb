@@ -8,4 +8,4 @@ before_install:
   - tar -xzf geckodriver-v0.20.1-linux64.tar.gz -C /tmp/geckodriver
   - export PATH=$PATH:/tmp/gecko-driver
   - sleep 5
-script: mvn install && sleep 5
+script: xvfb-run mvn install && sleep 5
