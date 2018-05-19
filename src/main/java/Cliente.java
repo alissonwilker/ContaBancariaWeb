@@ -1,4 +1,4 @@
-package br;
+
 /**
  * Classe abstrata que representa um cliente (pessoa física ou pessoa jurídica).
  *

@@ -1,4 +1,4 @@
-package br;
+
 /**
  * Classe que representa uma pessoa jurídica.
  *

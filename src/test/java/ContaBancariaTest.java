@@ -2,12 +2,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import br.Cliente;
-import br.ContaBancaria;
-import br.PessoaFisica;
-import br.PessoaJuridica;
-
-/**
+/** 
  * Classe de teste para a classe ContaBancaria.
  *
  */
