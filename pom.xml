@@ -19,7 +19,7 @@
 		<maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
 		<maven-war-plugin.version>3.0.0</maven-war-plugin.version>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-		<maven-surefire-plugin.version>2.17</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 
 		<!-- versoes das dependencias -->
 		<wildfly.version>11.0.0.CR1</wildfly.version>
@@ -152,6 +152,9 @@
 	<profiles>
 		<profile>
 			<id>wildfly-managed</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>org.wildfly.arquillian</groupId>
