@@ -9,21 +9,21 @@
 	<form method="GET" action="BancoServlet">
 		<h2>Dados do dono da Conta Bancária</h2>
 		Nome do Cliente: <input type="text" name="nomeCliente" /><br /> <input
-			type="radio" name="tipoCliente" value="pessoaFisica"> Pessoa
-		Física<br /> <input type="radio" name="tipoCliente"
+			type="radio" id="tipoClientePessoaFisica" name="tipoCliente" value="pessoaFisica"> Pessoa
+		Física<br /> <input type="radio" id="tipoClientePessoaJuridica" name="tipoCliente"
 			value="pessoaJuridica"> Pessoa Jurídica<br /> CPF/CNPJ: <input
 			type="text" name="cpfCnpj" /><br />
 		<h2>Operações disponíveis na Conta Bancária</h2>
-		<input type="radio" name="operacao" value="recuperarNomeCliente">
-		Recuperar nome do cliente.<br /> <input type="radio" name="operacao"
+		<input type="radio" id="operacaoRecuperarNomeCliente" name="operacao" value="recuperarNomeCliente">
+		Recuperar nome do cliente.<br /> <input type="radio" id="operacaoRecuperarCpfCliente" name="operacao"
 			value="recuperarCpfCliente"> Recuperar CPF do cliente.<br />
-		<input type="radio" name="operacao" value="recuperarCnpjCliente">
-		Recuperar CNPJ do cliente.<br /> <input type="radio" name="operacao"
+		<input type="radio" id="operacaoRecuperarCnpjCliente" name="operacao" value="recuperarCnpjCliente">
+		Recuperar CNPJ do cliente.<br /> <input type="radio" id="operacaoRecuperarSaldo" name="operacao"
 			value="recuperarSaldo"> Recuperar saldo da conta.<br /> <input
-			type="radio" name="operacao" value="depositarValor">
-		Depositar valor na conta.<br /> <input type="radio" name="operacao"
+			type="radio" id="operacaoDepositarValor" name="operacao" value="depositarValor">
+		Depositar valor na conta.<br /> <input type="radio" id="operacaoSacarValor" name="operacao"
 			value="sacarValor"> Sacar valor da conta.<br /> <input
-			type="radio" name="operacao" value="depositarSacarValor">
+			type="radio" id="operacaoDepositarSacarValor" name="operacao" value="depositarSacarValor">
 		Depositar um valor e em seguida sacar outro valor da conta.<br />
 		Valor da operação de depósito (se for o caso): <input type="number"
 			name="valorDeposito" /><br /> Valor da operação de saque (se for o
