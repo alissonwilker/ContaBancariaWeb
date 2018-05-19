@@ -31,6 +31,7 @@
 		<junit.version>4.12</junit.version>
 		<weld-servlet.version>2.4.7.Final</weld-servlet.version>
 		<wildfly-arquillian-container.version>2.1.0.Final</wildfly-arquillian-container.version>
+		<javax.servlet-api.version>4.0.0</javax.servlet-api.version>
 	</properties>
 
 	<dependencyManagement>
@@ -91,6 +92,13 @@
 			<groupId>org.jboss.weld.servlet</groupId>
 			<artifactId>weld-servlet</artifactId>
 			<version>${weld-servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet-api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	
