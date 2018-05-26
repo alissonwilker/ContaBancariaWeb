@@ -41,7 +41,7 @@ public abstract class AbstractIntegrationTest {
 
         File[] bibliotecas = Maven.resolver().loadPomFromFile("pom.xml").importRuntimeAndTestDependencies().resolve()
             .withTransitivity().asFile();
-        webArchiveTeste.addAsLibraries(bibliotecas).addPackages(true, "");
+        webArchiveTeste.addAsLibraries(bibliotecas).addDefaultPackage();
 
         webArchiveTeste.merge(ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)
             .importDirectory("src/main/resources").as(GenericArchive.class), "/WEB-INF/classes", Filters.includeAll());
