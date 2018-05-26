@@ -51,7 +51,7 @@ public abstract class AbstractIntegrationTest {
     
     @Before
     public void beforeTest() {
-        System.setProperty("webdriver.gecko.driver", "/tmp/geckodriver/geckodriver");
+        System.setProperty("webdriver.gecko.driver", "./geckodriver");
 
         FirefoxOptions firefoxOptions = new FirefoxOptions().addArguments("-headless");
         driver = new FirefoxDriver(firefoxOptions);
