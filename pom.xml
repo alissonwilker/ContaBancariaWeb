@@ -25,9 +25,9 @@
 		<wildfly.version>11.0.0.CR1</wildfly.version>
 		<shrinkwrap-resolver-bom.version>3.0.0-beta-2</shrinkwrap-resolver-bom.version>
 		<arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
-		<com.google-guava.version>25.1-jre</com.google-guava.version>
-		<selenium-chrome-driver.version>3.12.0</selenium-chrome-driver.version>
-		<selenium-htmlunit-driver.version>2.31.0</selenium-htmlunit-driver.version>
+		<com.google-guava.version>21.0</com.google-guava.version>
+		<selenium-firefox-driver.version>3.12.0</selenium-firefox-driver.version>
+		<selenium-htmlunit-driver.version>2.30.1</selenium-htmlunit-driver.version>
 		<junit.version>4.12</junit.version>
 		<weld-servlet.version>2.4.7.Final</weld-servlet.version>
 		<wildfly-arquillian-container.version>2.1.0.Final</wildfly-arquillian-container.version>
@@ -61,8 +61,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-chrome-driver</artifactId>
-			<version>${selenium-chrome-driver.version}</version>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>${selenium-firefox-driver.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

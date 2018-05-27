@@ -17,8 +17,8 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @RunWith(Arquillian.class)
@@ -51,10 +51,10 @@ public abstract class AbstractIntegrationTest {
     
     @Before
     public void beforeTest() {
-        System.setProperty("webdriver.chrome.driver", "./chromedriver");
+        System.setProperty("webdriver.gecko.driver", "./geckodriver");
 
-        ChromeOptions chromeOptions = new ChromeOptions().addArguments("headless");
-        driver = new ChromeDriver(chromeOptions);
+        FirefoxOptions firefoxOptions = new FirefoxOptions().addArguments("-headless");
+        driver = new FirefoxDriver(firefoxOptions);
     }
 
     @After
