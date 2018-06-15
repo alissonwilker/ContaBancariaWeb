@@ -1,11 +1,14 @@
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class ControllerServlet
@@ -13,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/BancoServlet")
 public class BancoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    private static final String RESULTADO_OPERACAO_BANCARIA = "resultadoOperacaoBancaria";
+    private static final String ATRIB_CONTAS = "contas";
+    private static final String PARAM_ID_CONTA = "idConta";
     private static final String PARAM_NOME_CLIENTE = "nomeCliente";
     private static final String PARAM_TIPO_CLIENTE = "tipoCliente";
     private static final String PARAM_CPF_CNPJ = "cpfCnpj";
@@ -21,72 +26,167 @@ public class BancoServlet extends HttpServlet {
     private static final String PARAM_VALOR_DEPOSITO = "valorDeposito";
     private static final String PARAM_VALOR_SAQUE = "valorSaque";
 
-    enum Operacao {
-        recuperarNomeCliente, recuperarCpfCliente, recuperarCnpjCliente, recuperarSaldo, depositarValor, sacarValor, depositarSacarValor
-    }
+    private Operacao operacao;
+    private String nomeCliente;
+    private String cpfCnpj;
+    private String tipoClienteStr;
+    private String valorDepositoStr;
+    private String valorSaqueStr;
 
-    enum TipoCliente {
-        pessoaFisica, pessoaJuridica
+    private enum Operacao {
+        criarConta, recuperarNomeCliente, recuperarCpfCliente, recuperarCnpjCliente, recuperarSaldo, depositarValor, sacarValor, depositarSacarValor
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        String nomeCliente = request.getParameter(PARAM_NOME_CLIENTE);
-        String cpfCnpj = request.getParameter(PARAM_CPF_CNPJ);
-        String valorDeposito = request.getParameter(PARAM_VALOR_DEPOSITO);
-        String valorSaque = request.getParameter(PARAM_VALOR_SAQUE);
+        String resposta = null;
+        recuperarParametros(request);
 
-        String tipoClienteStr = request.getParameter(PARAM_TIPO_CLIENTE);
-        TipoCliente tipoCliente = Enum.valueOf(TipoCliente.class, tipoClienteStr);
-
-        String operacaoStr = request.getParameter(PARAM_OPERACAO);
-        Operacao operacao = Enum.valueOf(Operacao.class, operacaoStr);
-
-        ContaBancaria contaBancaria = criarContaBancaria(nomeCliente, cpfCnpj, tipoCliente);
-
-        Object resposta = null;
         switch (operacao) {
+        case criarConta:
+            resposta = criarContaBancaria(request);
+            break;
         case recuperarNomeCliente:
-            resposta = contaBancaria.getCliente().getNome();
+            resposta = recuperarNomeCliente(request);
             break;
         case recuperarCpfCliente:
-            if (TipoCliente.pessoaFisica.equals(tipoCliente)) {
-                resposta = ((PessoaFisica) contaBancaria.getCliente()).getCpf();
-            }
+            resposta = recuperarCpfCliente(request);
             break;
         case recuperarCnpjCliente:
-            if (TipoCliente.pessoaJuridica.equals(tipoCliente)) {
-                resposta = ((PessoaJuridica) contaBancaria.getCliente()).getCnpj();
-            }
+            resposta = recuperarCnpjCliente(request);
             break;
         case recuperarSaldo:
-            resposta = contaBancaria.getSaldo();
+            resposta = recuperarSaldo(request);
             break;
         case depositarValor:
-            contaBancaria.depositar(Integer.parseInt(valorDeposito));
-            resposta = contaBancaria.getSaldo();
+            resposta = depositarValor(request);
             break;
         case sacarValor:
-            resposta = contaBancaria.sacar(Integer.parseInt(valorSaque));
+            resposta = sacarValor(request);
             break;
         case depositarSacarValor:
-            contaBancaria.depositar(Integer.parseInt(valorDeposito));
-            resposta = contaBancaria.sacar(Integer.parseInt(valorSaque));
+            resposta = depositarSacarValor(request);
             break;
         }
 
-        request.setAttribute("resposta", resposta);
-        request.getRequestDispatcher("resposta.jsp").forward(request, response);
+        response.setContentType("application/json");
+        response.getWriter().print(resposta);
     }
 
-    private ContaBancaria criarContaBancaria(String nomeCliente, String cpfCnpj, TipoCliente tipoCliente) {
-        ContaBancaria contaBancaria;
-        if (TipoCliente.pessoaFisica.equals(tipoCliente)) {
-            contaBancaria = new ContaBancaria(new PessoaFisica(nomeCliente, cpfCnpj));
-        } else {
-            contaBancaria = new ContaBancaria(new PessoaJuridica(nomeCliente, cpfCnpj));
+    private void recuperarParametros(HttpServletRequest request) {
+        nomeCliente = request.getParameter(PARAM_NOME_CLIENTE);
+        cpfCnpj = request.getParameter(PARAM_CPF_CNPJ);
+        tipoClienteStr = request.getParameter(PARAM_TIPO_CLIENTE);
+        valorDepositoStr = request.getParameter(PARAM_VALOR_DEPOSITO);
+        valorSaqueStr = request.getParameter(PARAM_VALOR_SAQUE);
+
+        String operacaoStr = request.getParameter(PARAM_OPERACAO);
+        operacao = Enum.valueOf(Operacao.class, operacaoStr);
+    }
+
+    private String depositarSacarValor(HttpServletRequest request) {
+         ContaBancaria contaBancaria = recuperarContaBancaria(request);
+         int valorDeposito = Integer.parseInt(valorDepositoStr);
+         int valorSaque = Integer.parseInt(valorSaqueStr);
+         
+         Integer saldo = new BancoBusiness().depositarSacarValor(contaBancaria, valorDeposito, valorSaque);
+         
+         return criarRetornoOperacaoBancaria(saldo);
+    }
+
+    private String sacarValor(HttpServletRequest request) {
+        ContaBancaria contaBancaria = recuperarContaBancaria(request);
+        int valorSaque = Integer.parseInt(valorSaqueStr);
+
+        Integer saldo = new BancoBusiness().sacarValor(contaBancaria, valorSaque);
+        
+        return criarRetornoOperacaoBancaria(saldo);
+    }
+
+    private String depositarValor(HttpServletRequest request) {
+        ContaBancaria contaBancaria = recuperarContaBancaria(request);
+        int valorDeposito = Integer.parseInt(valorDepositoStr);
+
+        Integer saldo = new BancoBusiness().depositarValor(contaBancaria, valorDeposito);
+        
+        return criarRetornoOperacaoBancaria(saldo);
+    }
+
+    private String recuperarSaldo(HttpServletRequest request) {
+        ContaBancaria contaBancaria = recuperarContaBancaria(request);
+
+        Integer saldo = new BancoBusiness().recuperarSaldo(contaBancaria);
+        
+        return criarRetornoOperacaoBancaria(saldo);
+    }
+
+    private String recuperarCnpjCliente(HttpServletRequest request) {
+        ContaBancaria contaBancaria = recuperarContaBancaria(request);
+
+        String cnpj = new BancoBusiness().recuperarCnpjCliente(contaBancaria);
+        
+        return criarRetornoOperacaoBancaria(cnpj);
+    }
+
+    private String recuperarCpfCliente(HttpServletRequest request) {
+        ContaBancaria contaBancaria = recuperarContaBancaria(request);
+
+        String cpf = new BancoBusiness().recuperarCpfCliente(contaBancaria);
+        
+        return criarRetornoOperacaoBancaria(cpf);
+    }
+
+    private String recuperarNomeCliente(HttpServletRequest request) {
+        ContaBancaria contaBancaria = recuperarContaBancaria(request);
+
+        String nomeCliente = new BancoBusiness().recuperarNomeCliente(contaBancaria);
+        
+        return criarRetornoOperacaoBancaria(nomeCliente);
+    }
+
+    private String criarContaBancaria(HttpServletRequest request) {
+        Cliente.TipoCliente tipoCliente = Enum.valueOf(Cliente.TipoCliente.class, tipoClienteStr);
+        
+        ContaBancaria contaBancaria = new BancoBusiness().criarContaBancaria(nomeCliente, cpfCnpj, tipoCliente);
+
+        adicionarNovaContaNaSessaoDoUsuario(request, contaBancaria);
+        return criarRetornoNovaContaBancaria(contaBancaria);
+    }
+
+    private String criarRetornoOperacaoBancaria(Object resultadoOperacaoBancaria) {
+        JsonUtils.CampoJson campoResultadoOperacaoBancaria = new JsonUtils.CampoJson(RESULTADO_OPERACAO_BANCARIA,
+            resultadoOperacaoBancaria);
+        return JsonUtils.criarJsonObject(campoResultadoOperacaoBancaria);
+    }
+
+    private String criarRetornoNovaContaBancaria(ContaBancaria contaBancaria) {
+        JsonUtils.CampoJson campoIdConta = new JsonUtils.CampoJson(PARAM_ID_CONTA, contaBancaria.getId());
+        JsonUtils.CampoJson campoNomeCliente = new JsonUtils.CampoJson(PARAM_NOME_CLIENTE,
+            contaBancaria.getCliente().getNome());
+        return JsonUtils.criarJsonObject(campoIdConta, campoNomeCliente);
+    }
+
+    private void adicionarNovaContaNaSessaoDoUsuario(HttpServletRequest request, ContaBancaria contaBancaria) {
+        Map<Integer, ContaBancaria> contas = recuperarContasDaSessaoDoUsuario(request);
+        contas.put(contaBancaria.getId(), contaBancaria);
+    }
+
+    private ContaBancaria recuperarContaBancaria(HttpServletRequest request) {
+        int idConta = Integer.parseInt(request.getParameter(PARAM_ID_CONTA));
+
+        Map<Integer, ContaBancaria> contasBancarias = recuperarContasDaSessaoDoUsuario(request);
+        return contasBancarias.get(idConta);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<Integer, ContaBancaria> recuperarContasDaSessaoDoUsuario(HttpServletRequest request) {
+        HttpSession sessao = request.getSession();
+        Map<Integer, ContaBancaria> contas = (Map<Integer, ContaBancaria>) sessao.getAttribute(ATRIB_CONTAS);
+        if (contas == null) {
+            contas = new HashMap<>();
+            sessao.setAttribute(ATRIB_CONTAS, contas);
         }
-        return contaBancaria;
+        return contas;
     }
 
 }

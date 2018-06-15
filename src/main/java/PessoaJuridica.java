@@ -4,6 +4,8 @@
  *
  */
 public class PessoaJuridica extends Cliente {
+    private static final long serialVersionUID = 1L;
+
     /**
      * O CNPJ da pessoa jurídica.
      */

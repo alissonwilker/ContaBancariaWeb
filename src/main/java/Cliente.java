@@ -1,9 +1,16 @@
+import java.io.Serializable;
 
 /**
  * Classe abstrata que representa um cliente (pessoa física ou pessoa jurídica).
  *
  */
-public abstract class Cliente {
+public abstract class Cliente implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    enum TipoCliente {
+        pessoaFisica, pessoaJuridica
+    }
+
     /**
      * O nome do cliente.
      */
@@ -27,5 +34,5 @@ public abstract class Cliente {
     public String getNome() {
         return nome;
     }
-
+    
 }

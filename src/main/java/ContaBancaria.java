@@ -1,9 +1,18 @@
+import java.io.Serializable;
 
 /**
  * Classe que representa uma conta bancária.
  *
  */
-public class ContaBancaria {
+public class ContaBancaria implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static int contador;
+
+    /**
+     * Identificador da conta.
+     */
+    private int id;
+
     /**
      * Saldo da conta bancária.
      */
@@ -15,13 +24,23 @@ public class ContaBancaria {
     private Cliente cliente;
 
     /**
-     * Construtor que recebe o cliente dono da nova conta bancária. 
+     * Construtor que recebe o cliente dono da nova conta bancária.
      * 
      * @param cliente
      *            o cliente dono da conta bancária.
      */
     public ContaBancaria(Cliente cliente) {
+        this.id = ++contador;
         this.cliente = cliente;
+    }
+
+    /**
+     * Recupera o identificador da conta.
+     * 
+     * @return o id da conta.
+     */
+    public int getId() {
+        return id;
     }
 
     /**
@@ -48,11 +67,13 @@ public class ContaBancaria {
      * @param valor
      *            o valor a ser depositado na conta bancária. O valor a ser depositado deve ser
      *            positivo.
+     * @return o novo saldo da conta bancária, após o depósito.
      */
-    public void depositar(int valor) {
+    public int depositar(int valor) {
         if (valor > 0) {
             saldo = saldo + valor;
         }
+        return saldo;
     }
 
     /**
@@ -68,6 +89,16 @@ public class ContaBancaria {
             saldo = saldo - valor;
         }
         return saldo;
+    }
+    
+    public static ContaBancaria criar(String nomeCliente, String cpfCnpj, Cliente.TipoCliente tipoCliente) {
+        ContaBancaria contaBancaria;
+        if (Cliente.TipoCliente.pessoaFisica.equals(tipoCliente)) {
+            contaBancaria = new ContaBancaria(new PessoaFisica(nomeCliente, cpfCnpj));
+        } else {
+            contaBancaria = new ContaBancaria(new PessoaJuridica(nomeCliente, cpfCnpj));
+        }
+        return contaBancaria;
     }
 
 }

@@ -1,8 +1,10 @@
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 public class ContaBancariaWebITCase extends AbstractIntegrationTest {
+    private static final String NAME_INPUT_ID_CONTA = "idConta";
     private static final String VALOR_DEPOSITO_TAG = "valorDeposito";
     private static final String VALOR_SAQUE_TAG = "valorSaque";
     private static final String VALOR_0 = "0";
@@ -10,6 +12,8 @@ public class ContaBancariaWebITCase extends AbstractIntegrationTest {
     private static final String VALOR_20 = "20";
     private static final String CNPJ_CLIENTE = "01.001...";
     private static final String CPF_CNPJ_TAG = "cpfCnpj";
+    private static final String ID_BOTAO_CRIAR_CONTA = "botaoCriarConta";
+    private static final String ID_BOTAO_REALIZAR_OPERACAO_BANCARIA = "botaoRealizarOperacaoBancaria";
     private static final String TIPO_CLIENTE_PESSOA_FISICA_TAG = "tipoClientePessoaFisica";
     private static final String TIPO_CLIENTE_PESSOA_JURIDICA_TAG = "tipoClientePessoaJuridica";
     private static final String NOME_CLIENTE_TAG = "nomeCliente";
@@ -18,72 +22,70 @@ public class ContaBancariaWebITCase extends AbstractIntegrationTest {
     private static final String NOME_CLIENTE_PESSOA_JURIDICA = "Atacadista S/A";
 
     @Test
-    public void testRecuperarNomeCliente() {
-        validarOperacaoPessoaFisica("operacaoRecuperarNomeCliente", NOME_CLIENTE_PESSOA_FISICA);
+    public void testPessoaFisica() {
+        String idContaPessoaFisica = criarContaBancaria(NOME_CLIENTE_PESSOA_FISICA, CPF_CLIENTE, true);
+
+        validarOperacao("operacaoRecuperarNomeCliente", NOME_CLIENTE_PESSOA_FISICA, idContaPessoaFisica);
+        validarOperacao("operacaoRecuperarCpfCliente", CPF_CLIENTE, idContaPessoaFisica);
+        validarOperacao("operacaoRecuperarSaldo", VALOR_0, idContaPessoaFisica);
+        validarOperacaoDepositoOuSaque("operacaoDepositarValor", VALOR_10, VALOR_0, VALOR_10, idContaPessoaFisica);
+        validarOperacaoDepositoOuSaque("operacaoSacarValor", VALOR_0, VALOR_10, VALOR_0, idContaPessoaFisica);
+        validarOperacaoDepositoOuSaque("operacaoDepositarSacarValor", VALOR_20, VALOR_10, VALOR_10,
+            idContaPessoaFisica);
     }
 
     @Test
-    public void testRecuperarCpfCliente() {
-        validarOperacaoPessoaFisica("operacaoRecuperarCpfCliente", CPF_CLIENTE);
+    public void testPessoaJuridica() {
+        String idContaPessoaJuridica = criarContaBancaria(NOME_CLIENTE_PESSOA_JURIDICA, CNPJ_CLIENTE, false);
+
+        validarOperacao("operacaoRecuperarNomeCliente", NOME_CLIENTE_PESSOA_JURIDICA, idContaPessoaJuridica);
+        validarOperacao("operacaoRecuperarCnpjCliente", CNPJ_CLIENTE, idContaPessoaJuridica);
     }
 
     @Test
-    public void testRecuperarCnpjCliente() {
-        validarOperacaoPessoaJuridica("operacaoRecuperarCnpjCliente", CNPJ_CLIENTE);
+    public void testPessoaFisicaEPessoaJuridica() {
+        String idContaPessoaFisica = criarContaBancaria(NOME_CLIENTE_PESSOA_FISICA, CPF_CLIENTE, true);
+        String idContaPessoaJuridica = criarContaBancaria(NOME_CLIENTE_PESSOA_JURIDICA, CNPJ_CLIENTE, false);
+
+        validarOperacaoDepositoOuSaque("operacaoDepositarValor", VALOR_20, VALOR_0, VALOR_20, idContaPessoaFisica);
+        validarOperacaoDepositoOuSaque("operacaoDepositarValor", VALOR_10, VALOR_0, VALOR_10, idContaPessoaJuridica);
+
+        validarOperacao("operacaoRecuperarSaldo", VALOR_20, idContaPessoaFisica);
+        validarOperacao("operacaoRecuperarSaldo", VALOR_10, idContaPessoaJuridica);
     }
 
-    @Test
-    public void testOperacaoRecuperarSaldo() {
-        validarOperacaoPessoaFisica("operacaoRecuperarSaldo", VALOR_0);
+    private String criarContaBancaria(String nomeCliente, String cpfCnpj, boolean pessoaFisica) {
+        driver.get(APP_HOME_URL);
+
+        preencherInputTexto(NOME_CLIENTE_TAG, nomeCliente);
+        preencherInputTexto(CPF_CNPJ_TAG, cpfCnpj);
+        if (pessoaFisica) {
+            driver.findElement(By.id(TIPO_CLIENTE_PESSOA_FISICA_TAG)).click();
+        } else {
+            driver.findElement(By.id(TIPO_CLIENTE_PESSOA_JURIDICA_TAG)).click();
+        }
+        driver.findElement(By.id(ID_BOTAO_CRIAR_CONTA)).click();
+
+        aguardarRespostaPorClassName("celulaTabela");
+
+        return driver.findElement(By.className("celulaTabela")).getText();
     }
 
-    @Test
-    public void testOperacaoDepositarValor() {
-        validarOperacaoDepositoOuSaque("operacaoDepositarValor", VALOR_10, VALOR_0, VALOR_10);
-    }
+    private void validarOperacao(final String NOME_OPERACAO, final String RESPOSTA_ESPERADA, String idConta) {
+        preencherInputTexto(NAME_INPUT_ID_CONTA, idConta);
+        driver.findElement(By.id(NOME_OPERACAO)).click();
+        driver.findElement(By.id(ID_BOTAO_REALIZAR_OPERACAO_BANCARIA)).click();
 
-    @Test
-    public void testOperacaoSacarValor() {
-        validarOperacaoDepositoOuSaque("operacaoSacarValor", VALOR_0, VALOR_10, VALOR_0);
-    }
+        aguardarResposta(ID_RESPOSTA);
 
-    @Test
-    public void testOperacaoDepositarSacarValor() {
-        validarOperacaoDepositoOuSaque("operacaoDepositarSacarValor", VALOR_20, VALOR_10, VALOR_10);
+        Assert.assertEquals(RESPOSTA_ESPERADA, driver.findElement(By.id(ID_RESPOSTA)).getText());
     }
 
     private void validarOperacaoDepositoOuSaque(final String NOME_OPERACAO, final String VALOR_DEPOSITO,
-        final String VALOR_SAQUE, final String RESPOSTA_ESPERADA) {
-        preencherClientePessoaFisica(NOME_OPERACAO);
-        driver.findElement(By.name(VALOR_DEPOSITO_TAG)).sendKeys(VALOR_DEPOSITO);
-        driver.findElement(By.name(VALOR_SAQUE_TAG)).sendKeys(VALOR_SAQUE);
-        submeterEValidar(RESPOSTA_ESPERADA);
-    }
+        final String VALOR_SAQUE, final String RESPOSTA_ESPERADA, String idConta) {
+        preencherInputTexto(VALOR_DEPOSITO_TAG, VALOR_DEPOSITO);
+        preencherInputTexto(VALOR_SAQUE_TAG, VALOR_SAQUE);
 
-    private void preencherClientePessoaFisica(final String NOME_OPERACAO) {
-        driver.get(APP_HOME_URL);
-        driver.findElement(By.name(NOME_CLIENTE_TAG)).sendKeys(NOME_CLIENTE_PESSOA_FISICA);
-        driver.findElement(By.id(TIPO_CLIENTE_PESSOA_FISICA_TAG)).click();
-        driver.findElement(By.name(CPF_CNPJ_TAG)).sendKeys(CPF_CLIENTE);
-        driver.findElement(By.id(NOME_OPERACAO)).click();
+        validarOperacao(NOME_OPERACAO, RESPOSTA_ESPERADA, idConta);
     }
-
-    private void preencherClientePessoaJuridica(final String NOME_OPERACAO) {
-        driver.get(APP_HOME_URL);
-        driver.findElement(By.name(NOME_CLIENTE_TAG)).sendKeys(NOME_CLIENTE_PESSOA_JURIDICA);
-        driver.findElement(By.id(TIPO_CLIENTE_PESSOA_JURIDICA_TAG)).click();
-        driver.findElement(By.name(CPF_CNPJ_TAG)).sendKeys(CNPJ_CLIENTE);
-        driver.findElement(By.id(NOME_OPERACAO)).click();
-    }
-
-    private void validarOperacaoPessoaFisica(final String NOME_OPERACAO, final String RESPOSTA_ESPERADA) {
-        preencherClientePessoaFisica(NOME_OPERACAO);
-        submeterEValidar(RESPOSTA_ESPERADA);
-    }
-
-    private void validarOperacaoPessoaJuridica(final String NOME_OPERACAO, final String RESPOSTA_ESPERADA) {
-        preencherClientePessoaJuridica(NOME_OPERACAO);
-        submeterEValidar(RESPOSTA_ESPERADA);
-    }
-
 }

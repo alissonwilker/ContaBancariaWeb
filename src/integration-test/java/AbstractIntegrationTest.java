@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -25,7 +26,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public abstract class AbstractIntegrationTest {
     private static final String FORM_TAG = "form";
     private static final String APP_CONTEXT_ROOT = "ContaBancariaWeb";
-    private static final String ID_RESPOSTA = "resposta";
+    protected static final String ID_RESPOSTA = "resposta";
     private static final int WAIT_TIMEOUT = 10;
 
     protected static final String APP_HOME_URL = "http://localhost:8080/" + APP_CONTEXT_ROOT;
@@ -62,10 +63,19 @@ public abstract class AbstractIntegrationTest {
         driver.quit();
     }
 
-    private void aguardarResposta(final String ID_RESPOSTA) {
+    protected void aguardarResposta(final String ID_RESPOSTA) {
         (new WebDriverWait(driver, WAIT_TIMEOUT)).until(new Function<WebDriver, Boolean>() {
             public Boolean apply(WebDriver driver) {
-                return driver.findElement(By.id(ID_RESPOSTA)).isDisplayed();
+                WebElement resposta = driver.findElement(By.id(ID_RESPOSTA));
+                return resposta.isDisplayed() && resposta.getText().length() > 0;
+            }
+        });
+    }
+    
+    protected void aguardarRespostaPorClassName(String className) {
+        (new WebDriverWait(driver, WAIT_TIMEOUT)).until(new Function<WebDriver, Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                return driver.findElement(By.className(className)).isDisplayed();
             }
         });
     }
@@ -76,6 +86,12 @@ public abstract class AbstractIntegrationTest {
         aguardarResposta(ID_RESPOSTA);
 
         Assert.assertEquals(RESPOSTA_ESPERADA, driver.findElement(By.id(ID_RESPOSTA)).getText());
+    }
+    
+    protected void preencherInputTexto(String inputName, String novoTexto) {
+        WebElement input = driver.findElement(By.name(inputName));
+        input.clear();
+        input.sendKeys(novoTexto);
     }
 
 }
