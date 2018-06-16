@@ -33,7 +33,7 @@ public class BancoServlet extends HttpServlet {
     private String valorDepositoStr;
     private String valorSaqueStr;
 
-    private enum Operacao {
+    private static enum Operacao {
         criarConta, recuperarNomeCliente, recuperarCpfCliente, recuperarCnpjCliente, recuperarSaldo, depositarValor, sacarValor, depositarSacarValor
     }
 
