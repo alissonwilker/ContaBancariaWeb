@@ -3,7 +3,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-public class ContaBancariaWebITCase extends AbstractIntegrationTest {
+public class ContaBancariaWebStatefulITCase extends AbstractIntegrationTest {
     private static final String NAME_INPUT_ID_CONTA = "idConta";
     private static final String VALOR_DEPOSITO_TAG = "valorDeposito";
     private static final String VALOR_SAQUE_TAG = "valorSaque";
