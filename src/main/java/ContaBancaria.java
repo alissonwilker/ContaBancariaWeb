@@ -91,14 +91,4 @@ public class ContaBancaria implements Serializable {
         return saldo;
     }
     
-    public static ContaBancaria criar(String nomeCliente, String cpfCnpj, Cliente.TipoCliente tipoCliente) {
-        ContaBancaria contaBancaria;
-        if (Cliente.TipoCliente.pessoaFisica.equals(tipoCliente)) {
-            contaBancaria = new ContaBancaria(new PessoaFisica(nomeCliente, cpfCnpj));
-        } else {
-            contaBancaria = new ContaBancaria(new PessoaJuridica(nomeCliente, cpfCnpj));
-        }
-        return contaBancaria;
-    }
-
 }

@@ -26,10 +26,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public abstract class AbstractIntegrationTest {
     private static final String FORM_TAG = "form";
     private static final String APP_CONTEXT_ROOT = "ContaBancariaWeb";
-    protected static final String ID_RESPOSTA = "resposta";
     private static final int WAIT_TIMEOUT = 10;
 
     protected static final String APP_HOME_URL = "http://localhost:8080/" + APP_CONTEXT_ROOT;
+    protected static final String ID_RESPOSTA = "resposta";
 
     protected WebDriver driver;
 

@@ -4,6 +4,8 @@
  *
  */
 public class PessoaFisica extends Cliente {
+    private static final long serialVersionUID = 1L;
+    
     /**
      * O CPF da pessoa física.
      */
