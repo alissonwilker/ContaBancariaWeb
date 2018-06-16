@@ -1,23 +1,21 @@
 
 /**
- * Classe que representa uma pessoa jurídica.
+ * Classe que representa uma pessoa juridica.
  *
  */
 public class PessoaJuridica extends Cliente {
-    private static final long serialVersionUID = 1L;
-
     /**
-     * O CNPJ da pessoa jurídica.
+     * O CNPJ da pessoa juridica.
      */
     private String cnpj;
 
     /**
-     * Construtor que recebe o nome e o CNPJ da pessoa jurídica.
+     * Construtor que recebe o nome e o CNPJ da pessoa juridica.
      * 
      * @param nome
-     *            o nome da pessoa jurídica.
+     *            o nome da pessoa juridica.
      * @param cnpj
-     *            o CNPJ da pessoa jurídica.
+     *            o CNPJ da pessoa juridica.
      */
     public PessoaJuridica(String nome, String cnpj) {
         super(nome);
@@ -25,9 +23,9 @@ public class PessoaJuridica extends Cliente {
     }
 
     /**
-     * Recupera o CNPJ da pessoa jurídica.
+     * Recupera o CNPJ da pessoa juridica.
      * 
-     * @return o CNPJ da pessoa jurídica.
+     * @return o CNPJ da pessoa juridica.
      */
     public String getCnpj() {
         return cnpj;

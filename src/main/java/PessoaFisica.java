@@ -1,23 +1,21 @@
 
 /**
- * Classe que representa uma pessoa física.
+ * Classe que representa uma pessoa fisica.
  *
  */
 public class PessoaFisica extends Cliente {
-    private static final long serialVersionUID = 1L;
-    
     /**
-     * O CPF da pessoa física.
+     * O CPF da pessoa fisica.
      */
     private String cpf;
 
     /**
-     * Construtor que recebe nome e CPF da pessoa física.
+     * Construtor que recebe nome e CPF da pessoa fisica.
      * 
      * @param nome
-     *            o nome da pessoa física.
+     *            o nome da pessoa fisica.
      * @param cpf
-     *            o CPF da pessoa física.
+     *            o CPF da pessoa fisica.
      */
     public PessoaFisica(String nome, String cpf) {
         super(nome);
@@ -25,9 +23,9 @@ public class PessoaFisica extends Cliente {
     }
 
     /**
-     * Recupera o CPF da pessoa física.
+     * Recupera o CPF da pessoa fisica.
      * 
-     * @return o CPF da pessoa física.
+     * @return o CPF da pessoa fisica.
      */
     public String getCpf() {
         return cpf;

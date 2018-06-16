@@ -1,33 +1,34 @@
-import java.io.Serializable;
-
 /**
- * Classe que representa uma conta bancária.
+ * Classe que representa uma conta bancaria.
  *
  */
-public class ContaBancaria implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class ContaBancaria {
+    /**
+     * Contador de instancias da classe ContaBancaria.
+     */
     private static int contador;
 
     /**
-     * Identificador da conta.
+     * Identificador da conta. Representa o numero da instancia de ContaBancaria.
      */
     private int id;
 
     /**
-     * Saldo da conta bancária.
+     * Saldo da conta bancaria.
      */
     private int saldo = 0;
 
     /**
-     * O cliente dono da conta bancária.
+     * O cliente dono da conta bancaria.
      */
     private Cliente cliente;
 
     /**
-     * Construtor que recebe o cliente dono da nova conta bancária.
+     * Construtor que recebe o cliente dono da nova conta bancaria. Tambem configura o id da conta de
+     * acordo com o contador de instancias, que eh incrementado por este construtor.
      * 
      * @param cliente
-     *            o cliente dono da conta bancária.
+     *            o cliente dono da conta bancaria.
      */
     public ContaBancaria(Cliente cliente) {
         this.id = ++contador;
@@ -44,30 +45,30 @@ public class ContaBancaria implements Serializable {
     }
 
     /**
-     * Recupera o cliente dono da conta bancária.
+     * Recupera o cliente dono da conta bancaria.
      * 
-     * @return o cliente dono da conta bancária.
+     * @return o cliente dono da conta bancaria.
      */
     public Cliente getCliente() {
         return this.cliente;
     }
 
     /**
-     * Recupera o saldo da conta bancária.
+     * Recupera o saldo da conta bancaria.
      * 
-     * @return o saldo da conta bancária.
+     * @return o saldo da conta bancaria.
      */
     public int getSaldo() {
         return saldo;
     }
 
     /**
-     * Deposita um valor na conta bancária, desde que esse valor seja positivo.
+     * Deposita um valor na conta bancaria, desde que esse valor seja positivo.
      * 
      * @param valor
-     *            o valor a ser depositado na conta bancária. O valor a ser depositado deve ser
+     *            o valor a ser depositado na conta bancaria. O valor a ser depositado deve ser
      *            positivo.
-     * @return o novo saldo da conta bancária, após o depósito.
+     * @return o novo saldo da conta bancaria, após o deposito.
      */
     public int depositar(int valor) {
         if (valor > 0) {
@@ -77,12 +78,12 @@ public class ContaBancaria implements Serializable {
     }
 
     /**
-     * Saca um valor da conta bancária, se esse valor for positivo e menor ou igual ao saldo.
+     * Saca um valor da conta bancaria, se esse valor for positivo e menor ou igual ao saldo.
      * 
      * @param valor
-     *            o valor a ser sacado da conta bancária. O valor a ser sacado deve ser positivo e menor
-     *            ou igual ao saldo da conta bancária.
-     * @return o novo saldo da conta bancária, após o saque.
+     *            o valor a ser sacado da conta bancaria. O valor a ser sacado deve ser positivo e menor
+     *            ou igual ao saldo da conta bancaria.
+     * @return o novo saldo da conta bancaria, apos o saque.
      */
     public int sacar(int valor) {
         if (valor > 0 && valor <= saldo) {
@@ -90,5 +91,5 @@ public class ContaBancaria implements Serializable {
         }
         return saldo;
     }
-    
+
 }

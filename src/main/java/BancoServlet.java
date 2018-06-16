@@ -36,7 +36,7 @@ public class BancoServlet extends HttpServlet {
     private static enum Operacao {
         criarConta, recuperarNomeCliente, recuperarCpfCliente, recuperarCnpjCliente, recuperarSaldo, depositarValor, sacarValor, depositarSacarValor
     }
-
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         String resposta = null;
@@ -145,7 +145,7 @@ public class BancoServlet extends HttpServlet {
     }
 
     private String criarContaBancaria(HttpServletRequest request) {
-        Cliente.TipoCliente tipoCliente = Enum.valueOf(Cliente.TipoCliente.class, tipoClienteStr);
+        BancoBusiness.TipoCliente tipoCliente = Enum.valueOf(BancoBusiness.TipoCliente.class, tipoClienteStr);
         
         ContaBancaria contaBancaria = new BancoBusiness().criarContaBancaria(nomeCliente, cpfCnpj, tipoCliente);
 

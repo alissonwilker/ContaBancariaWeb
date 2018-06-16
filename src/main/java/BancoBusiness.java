@@ -1,4 +1,8 @@
 public class BancoBusiness {
+    public static enum TipoCliente {
+        pessoaFisica, pessoaJuridica
+    }
+
     public Integer depositarSacarValor(ContaBancaria contaBancaria, int valorDeposito, int valorSaque) {
         if (contaBancaria != null) {
             contaBancaria.depositar(valorDeposito);
@@ -59,9 +63,9 @@ public class BancoBusiness {
         return null;
     }
 
-    public ContaBancaria criarContaBancaria(String nomeCliente, String cpfCnpj, Cliente.TipoCliente tipoCliente) {
+    public ContaBancaria criarContaBancaria(String nomeCliente, String cpfCnpj, TipoCliente tipoCliente) {
         ContaBancaria contaBancaria;
-        if (Cliente.TipoCliente.pessoaFisica.equals(tipoCliente)) {
+        if (TipoCliente.pessoaFisica.equals(tipoCliente)) {
             contaBancaria = new ContaBancaria(new PessoaFisica(nomeCliente, cpfCnpj));
         } else {
             contaBancaria = new ContaBancaria(new PessoaJuridica(nomeCliente, cpfCnpj));
