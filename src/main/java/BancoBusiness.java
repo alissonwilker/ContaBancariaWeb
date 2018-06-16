@@ -22,8 +22,8 @@ public class BancoBusiness {
 
     public Integer depositarValor(ContaBancaria contaBancaria, int valorDeposito) {
         if (contaBancaria != null) {
-            int saldo = contaBancaria.depositar(valorDeposito);
-            return saldo;
+            contaBancaria.depositar(valorDeposito);
+            return contaBancaria.getSaldo();
         }
         return null;
     }
