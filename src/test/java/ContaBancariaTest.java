@@ -8,17 +8,17 @@ import org.junit.Test;
  */
 public class ContaBancariaTest {
     /**
-     * Um cliente pessoa física para ser dono de conta bancária.
+     * Um cliente pessoa fisica para ser dono de conta bancaria.
      */
     private Cliente pessoaFisica = new PessoaFisica("Carlos", "XXX.XXX.XXX-ZZ");
 
     /**
-     * Um cliente pessoa jurídica para ser dono de conta bancária.
+     * Um cliente pessoa juridica para ser dono de conta bancaria.
      */
     private Cliente pessoaJuridica = new PessoaJuridica("Eletromoveis Ltda.", "XX.XXX.XXX/0001-ZZ");
 
     /**
-     * Testa se o saldo está sendo retornado corretamente.
+     * Testa se o saldo esta sendo retornado corretamente.
      */
     @Test
     public void testGetSaldo() {
@@ -28,7 +28,7 @@ public class ContaBancariaTest {
     }
 
     /**
-     * Testa um depósito com valor positivo.
+     * Testa um deposito com valor positivo.
      */
     @Test
     public void testDepositarPositivo() {
@@ -41,7 +41,7 @@ public class ContaBancariaTest {
     }
 
     /**
-     * Testa um depósito com valor negativo.
+     * Testa um deposito com valor negativo.
      */
     @Test
     public void testDepositarNegativo() {
@@ -86,16 +86,27 @@ public class ContaBancariaTest {
     }
 
     /**
-     * Testa a associação de conta bancária com cliente e vice-versa.
+     * Testa a associacao de conta bancaria com cliente e vice-versa.
      */
     @Test
     public void testCliente() {
         ContaBancaria contaBancaria = new ContaBancaria(pessoaFisica);
 
-        assertEquals(contaBancaria.getCliente(), pessoaFisica);
+        assertEquals(pessoaFisica, contaBancaria.getCliente());
 
         ContaBancaria novaContaBancaria = new ContaBancaria(pessoaJuridica);
 
-        assertEquals(novaContaBancaria.getCliente(), pessoaJuridica);
+        assertEquals(pessoaJuridica, novaContaBancaria.getCliente());
+    }
+    
+    /**
+     * Testa se o id da conta bancaria esta sendo configurado corretamente.
+     */
+    @Test
+    public void testGetId() {
+        ContaBancaria contaBancaria = new ContaBancaria(pessoaFisica);
+        ContaBancaria novaContaBancaria = new ContaBancaria(pessoaJuridica);
+        
+        assertEquals(1, novaContaBancaria.getId() - contaBancaria.getId());
     }
 }
